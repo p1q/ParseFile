@@ -1,9 +1,10 @@
 package com.parsefile.view;
 
 import org.apache.log4j.Logger;
+import java.util.List;
 
 public class UserInterface {
-    public static final int MENU_ITEM_NUMBER = 2;
+    public static final int MENU_ITEM_NUMBER = 8;
     private static final Logger LOGGER = Logger.getLogger(UserInterface.class);
 
     public void showMenu() {
@@ -15,9 +16,24 @@ public class UserInterface {
         System.out.println("     +----------------------------------------------------+  ");
         System.out.println("                                                             ");
         System.out.println("              1. Open a file.                                ");
-        System.out.println("              2. Exit.                                       ");
+        System.out.println("              2. Show current file contents.                 ");
+        System.out.println("              3. Calculate statistics.                       ");
+        System.out.println("              4. Show statistics for each line.              ");
+        System.out.println("              5. Show statistics for the whole file.         ");
+        System.out.println("              6. Save statistics to the database.            ");
+        System.out.println("              7. Clear database.                             ");
+        System.out.println("              8. Exit.                                       ");
         System.out.println("                                                             ");
         System.out.printf("Please choose a menu item (1-%d inclusive): ", MENU_ITEM_NUMBER);
+    }
+
+    public void showFileContents(List<String> fileLines) {
+        if (fileLines == null || fileLines.size() == 0) {
+            System.out.println("Please open a file first.");
+        } else {
+            System.out.println("Full file contents: ");
+            fileLines.forEach(System.out::println);
+        }
     }
 
     public void showIncorrectRangeMessage() {
@@ -27,12 +43,16 @@ public class UserInterface {
 
     public void showWrongDataMessage(NumberFormatException nfe) {
         LOGGER.warn("Wrong data entered. " + nfe.getMessage());
-        System.out.println("Wrong data, please enter an integer: ");
+        System.out.print("Wrong data, please enter an integer: ");
     }
 
     public void showFileOpenErrorMessage() {
         LOGGER.error("File open error.");
         System.out.println("File open error.");
+    }
+
+    public void showFileOpenSuccessMessage() {
+        System.out.println("File was opened successfully.");
     }
 
     public void showPathToFileMessage() {
