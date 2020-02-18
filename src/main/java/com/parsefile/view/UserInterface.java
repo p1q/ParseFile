@@ -30,38 +30,52 @@ public class UserInterface {
 
     public void showFileContents(List<String> fileLines) {
         if (fileLines == null || fileLines.size() == 0) {
-            System.out.println("Please open a file first.");
+            showOpenFileMessage();
         } else {
             System.out.println("Full file contents: ");
             fileLines.forEach(System.out::println);
         }
     }
 
-    public void showIncorrectRangeMessage() {
+    public static void pressEnterToContinue() {
+        System.out.println("");
+        System.out.print("Press Enter key to continue...");
+        try {
+            System.in.read();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    public static void showIncorrectRangeMessage() {
         LOGGER.warn("Incorrect range entered.");
         System.out.print("Incorrect range, please try again: ");
     }
 
-    public void showWrongDataMessage(NumberFormatException nfe) {
+    public static void showWrongDataMessage(NumberFormatException nfe) {
         LOGGER.warn("Wrong data entered. " + nfe.getMessage());
         System.out.print("Wrong data, please enter an integer: ");
     }
 
-    public void showFileOpenErrorMessage() {
+    public static void showFileOpenErrorMessage() {
         LOGGER.error("File open error.");
         System.out.println("File open error.");
     }
 
-    public void showFileOpenSuccessMessage() {
+    public static void showFileOpenSuccessMessage() {
         System.out.println("File was opened successfully.");
     }
 
-    public void showPathToFileMessage() {
+    public static void showPathToFileMessage() {
         System.out.print("Please enter full path to the file: ");
     }
 
-    public void showUnexpectedValueMessage(int value) {
+    public static void showUnexpectedValueMessage(int value) {
         LOGGER.error("Unexpected value: " + value);
         throw new IllegalStateException("Unexpected value: " + value);
+    }
+
+    public static void showOpenFileMessage() {
+        System.out.println("Please open a file first.");
     }
 }

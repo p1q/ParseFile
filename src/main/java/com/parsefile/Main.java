@@ -11,29 +11,30 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         UserInterface userInterface = new UserInterface();
+        FileParse fileParse = new FileParser();
         int menuItem;
         List<String> fileLines= new ArrayList<>();
         do {
             userInterface.showMenu();
-            menuItem = getInput(userInterface);
+            menuItem = getInput();
             switch (menuItem) {
                 case 1:
                     Scanner scanner = new Scanner(System.in);
-                    userInterface.showPathToFileMessage();
+                    UserInterface.showPathToFileMessage();
                     String filePath = scanner.nextLine();
-                    FileParse fileParse = new FileParser();
                     Optional<List> fileData= fileParse.openFile(filePath);
                     if (fileData.isEmpty()) {
-                        userInterface.showFileOpenErrorMessage();
+                        UserInterface.showFileOpenErrorMessage();
                     } else {
                         fileLines = fileData.get();
-                        userInterface.showFileOpenSuccessMessage();
+                        UserInterface.showFileOpenSuccessMessage();
                     }
                     break;
                 case 2:
                     userInterface.showFileContents(fileLines);
                     break;
                 case 3:
+                    fileParse.calculateStatistics(fileLines);
                     break;
                 case 4:
                     break;
@@ -46,12 +47,12 @@ public class Main {
                 case 8:
                     break;
                 default:
-                    userInterface.showUnexpectedValueMessage(menuItem);
+                    UserInterface.showUnexpectedValueMessage(menuItem);
             }
         } while (menuItem != UserInterface.MENU_ITEM_NUMBER);
     }
 
-    public static int getInput(UserInterface userInterface) {
+    public static int getInput() {
         Scanner scanner = new Scanner(System.in);
         do {
             try {
@@ -59,10 +60,10 @@ public class Main {
                 if (input > 0 && input <= UserInterface.MENU_ITEM_NUMBER) {
                     return input;
                 } else {
-                    userInterface.showIncorrectRangeMessage();
+                    UserInterface.showIncorrectRangeMessage();
                 }
             } catch (NumberFormatException nfe) {
-                userInterface.showWrongDataMessage(nfe);
+                UserInterface.showWrongDataMessage(nfe);
             }
         } while (true);
     }
