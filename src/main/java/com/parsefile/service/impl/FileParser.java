@@ -12,12 +12,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileParser implements FileParse {
-    public void openFile(String filePath) {
-
-    }
-
-
-    private Optional<List> readFile(String filePath) {
+    @Override
+    public Optional<List> openFile(String filePath) {
         Path path = Paths.get(filePath.trim());
         try (Stream<String> lineStream = Files.lines(path)) {
             List<String> fileLines = lineStream.collect(Collectors.toList());
@@ -25,5 +21,10 @@ public class FileParser implements FileParse {
         } catch (IOException ioe) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void calculateStatistics() {
+
     }
 }
