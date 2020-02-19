@@ -10,6 +10,18 @@ public class Statistics {
     private int averageWordLength;
     private List<WordDuplication> wordDuplications = new ArrayList<>();
 
+    public Statistics() {
+    }
+
+    public Statistics(String longestWord, String shortestWord, int lineLength,
+                      int averageWordLength, List<WordDuplication> wordDuplications) {
+        this.longestWord = longestWord;
+        this.shortestWord = shortestWord;
+        this.lineLength = lineLength;
+        this.averageWordLength = averageWordLength;
+        this.wordDuplications = wordDuplications;
+    }
+
     public String getLongestWord() {
         return longestWord;
     }

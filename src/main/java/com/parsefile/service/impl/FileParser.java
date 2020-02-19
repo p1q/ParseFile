@@ -74,9 +74,9 @@ public class FileParser implements FileParse {
 
             List<WordDuplication> wordFileDuplications = getWordFileDuplications(linesStatistics);
 
+            Statistics statistics = new Statistics(longestFileWord, shortestFileWord,
+                    lineFileLength, averageFileWordLength, wordFileDuplications);
 
-
-            Statistics statistics = new Statistics();
             return Optional.of(statistics);
         }
     }
