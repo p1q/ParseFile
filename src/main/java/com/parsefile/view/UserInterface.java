@@ -78,4 +78,12 @@ public class UserInterface {
     public static void showOpenFileMessage() {
         System.out.println("Please open a file first.");
     }
+
+    public static void showCalculateStatisticsMessage() {
+        System.out.println("Please calculate statistics first.");
+    }
+
+    public static void showStatisticsCalculationErrorMessage() {
+        System.out.println("An error while statistic calculation was occurred!");
+    }
 }

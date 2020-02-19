@@ -1,5 +1,6 @@
 package com.parsefile;
 
+import com.parsefile.model.Statistics;
 import com.parsefile.service.FileParse;
 import com.parsefile.service.impl.FileParser;
 import com.parsefile.view.UserInterface;
@@ -12,8 +13,11 @@ public class Main {
     public static void main(String[] args) {
         UserInterface userInterface = new UserInterface();
         FileParse fileParse = new FileParser();
+        List<Statistics> linesStatistics = null;
+        Statistics fileStatistics = null;
+        List<String> fileLines = new ArrayList<>();
         int menuItem;
-        List<String> fileLines= new ArrayList<>();
+
         do {
             userInterface.showMenu();
             menuItem = getInput();
@@ -22,7 +26,7 @@ public class Main {
                     Scanner scanner = new Scanner(System.in);
                     UserInterface.showPathToFileMessage();
                     String filePath = scanner.nextLine();
-                    Optional<List> fileData= fileParse.openFile(filePath);
+                    Optional<List> fileData = fileParse.openFile(filePath);
                     if (fileData.isEmpty()) {
                         UserInterface.showFileOpenErrorMessage();
                     } else {
@@ -30,20 +34,54 @@ public class Main {
                         UserInterface.showFileOpenSuccessMessage();
                     }
                     break;
+
                 case 2:
                     userInterface.showFileContents(fileLines);
                     break;
+
                 case 3:
-                    fileParse.calculateStatistics(fileLines);
+                    if (fileLines.isEmpty()) {
+                        UserInterface.showOpenFileMessage();
+                        UserInterface.pressEnterToContinue();
+                    } else {
+                        Optional<List<Statistics>> optionalLinesStatistics
+                                = fileParse.calculateStatistics(fileLines);
+                        if (optionalLinesStatistics.isPresent()) {
+                            linesStatistics = optionalLinesStatistics.get();
+                        } else {
+                            UserInterface.showStatisticsCalculationErrorMessage();
+                            break;
+                        }
+
+                        Optional<Statistics> optionalFileStatistics
+                                = fileParse.calculateWholeFileStatistics(linesStatistics);
+
+                        if (optionalFileStatistics.isPresent()) {
+                            fileStatistics = optionalFileStatistics.get();
+                        } else {
+                            UserInterface.showStatisticsCalculationErrorMessage();
+                        }
+                    }
                     break;
+
                 case 4:
+                    if (linesStatistics == null) {
+                        UserInterface.showCalculateStatisticsMessage();
+                    }
                     break;
+
                 case 5:
+                    if (fileStatistics == null) {
+                        UserInterface.showCalculateStatisticsMessage();
+                    }
                     break;
+
                 case 6:
                     break;
+
                 case 7:
                     break;
+
                 case 8:
                     break;
                 default:
