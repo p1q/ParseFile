@@ -36,18 +36,11 @@ public class FileParser implements FileParse {
             for (String fileLine : fileLines) {
                 if (fileLine != null) {
                     String line = fileLine.replaceAll("([.,?!:;()@#$%&^<>'])", "");
-                    statistics.add(new Statistics());
 
-                    statistics.get(statistics.size() - 1)
-                            .setLongestWord(getLineLongestWord(line));
-                    statistics.get(statistics.size() - 1)
-                            .setShortestWord(getLineShortestWord(line));
-                    statistics.get(statistics.size() - 1)
-                            .setLineLength(fileLine.length());
-                    statistics.get(statistics.size() - 1)
-                            .setAverageWordLength(getLineAverageWordLength(line));
-                    statistics.get(statistics.size() - 1)
-                            .setWordDuplications(getLineDuplicates(line));
+                    Statistics statisticsItem = new Statistics(getLineLongestWord(line),
+                            getLineShortestWord(line), fileLine.length(), getLineWordsNumber(line),
+                            getLineAverageWordLength(line), getLineDuplicates(line));
+                    statistics.add(statisticsItem);
                 }
             }
             return Optional.of(statistics);
@@ -67,18 +60,36 @@ public class FileParser implements FileParse {
                     .mapToInt(Statistics::getLineLength)
                     .sum();
 
-            int averageFileWordLength = linesStatistics
+            int fileWordsQuantity = linesStatistics
                     .stream()
-                    .mapToInt(Statistics::getAverageWordLength)
-                    .sum() / linesStatistics.size();
+                    .mapToInt(Statistics::getWordsQuantity)
+                    .sum();
+
+            int averageFileWordLength = getAverageFileWordLength(linesStatistics,
+                    fileWordsQuantity);
 
             List<WordDuplication> wordFileDuplications = getWordFileDuplications(linesStatistics);
 
             Statistics statistics = new Statistics(longestFileWord, shortestFileWord,
-                    lineFileLength, averageFileWordLength, wordFileDuplications);
+                    lineFileLength, fileWordsQuantity, averageFileWordLength, wordFileDuplications);
 
             return Optional.of(statistics);
         }
+    }
+
+    private int getLineWordsNumber(String line) {
+        return line.split("\\s").length;
+    }
+
+    private int getAverageFileWordLength(List<Statistics> linesStatistics, int fileWordsQuantity) {
+        int averageFileWordLength = 0;
+        if (fileWordsQuantity != 0) {
+            averageFileWordLength = linesStatistics
+                    .stream()
+                    .mapToInt(Statistics::getAverageWordLength)
+                    .sum() / fileWordsQuantity;
+        }
+        return averageFileWordLength;
     }
 
     private List<WordDuplication> getWordFileDuplications(List<Statistics> linesStatistics) {
@@ -110,7 +121,7 @@ public class FileParser implements FileParse {
     private String getLongestFileWord(List<Statistics> linesStatistics) {
         String longestFileWord = linesStatistics.get(0).getLongestWord();
         for (int i = 0; i < linesStatistics.size() - 1; i++) {
-            if (linesStatistics.get(i).getLongestWord().length()
+            if (longestFileWord.length()
                     <= linesStatistics.get(i + 1).getLongestWord().length()) {
                 longestFileWord = linesStatistics.get(i + 1).getLongestWord();
             }
@@ -119,11 +130,11 @@ public class FileParser implements FileParse {
     }
 
     private String getShortestFileWord(List<Statistics> linesStatistics) {
-        String shortestFileWord = linesStatistics.get(0).getShortestWord();
+        String shortestFileWord = "";
         for (int i = 0; i < linesStatistics.size() - 1; i++) {
-            if (linesStatistics.get(i).getShortestWord().length()
+            if (shortestFileWord.length()
                     >= linesStatistics.get(i + 1).getShortestWord().length()) {
-                shortestFileWord = linesStatistics.get(i + 1).getLongestWord();
+                shortestFileWord = linesStatistics.get(i + 1).getShortestWord();
             }
         }
         return shortestFileWord;
@@ -158,7 +169,7 @@ public class FileParser implements FileParse {
                 .stream(words)
                 .mapToInt(String::length)
                 .sum();
-        return wordsLength / words.length;
+        return words.length == 0 ? 0 : wordsLength / words.length;
     }
 
     private List<WordDuplication> getLineDuplicates(String line) {
