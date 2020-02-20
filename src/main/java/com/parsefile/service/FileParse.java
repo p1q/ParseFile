@@ -7,7 +7,8 @@ import java.util.Optional;
 public interface FileParse {
     Optional<List> openFile(String filePath);
 
-    Optional<List<Statistics>> calculateStatistics(List<String> fileLines);
+    Optional<List<Statistics>> calculateLineStatistics(List<String> fileLines);
 
-    Optional<Statistics> calculateWholeFileStatistics(List<Statistics> linesStatistics);
+    Optional<Statistics> calculateFileStatistics(List<Statistics> linesStatistics,
+                                                 List<String> fileLines);
 }

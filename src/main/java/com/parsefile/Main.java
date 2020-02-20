@@ -45,7 +45,7 @@ public class Main {
                         UserInterface.pressEnterToContinue();
                     } else {
                         Optional<List<Statistics>> optionalLinesStatistics
-                                = fileParse.calculateStatistics(fileLines);
+                                = fileParse.calculateLineStatistics(fileLines);
                         if (optionalLinesStatistics.isPresent()) {
                             linesStatistics = optionalLinesStatistics.get();
                         } else {
@@ -54,7 +54,7 @@ public class Main {
                         }
 
                         Optional<Statistics> optionalFileStatistics
-                                = fileParse.calculateWholeFileStatistics(linesStatistics);
+                                = fileParse.calculateFileStatistics(linesStatistics, fileLines);
 
                         if (optionalFileStatistics.isPresent()) {
                             fileStatistics = optionalFileStatistics.get();

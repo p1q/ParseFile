@@ -28,7 +28,7 @@ public class FileParser implements FileParse {
     }
 
     @Override
-    public Optional<List<Statistics>> calculateStatistics(List<String> fileLines) {
+    public Optional<List<Statistics>> calculateLineStatistics(List<String> fileLines) {
         if (fileLines == null || fileLines.isEmpty()) {
             return Optional.empty();
         } else {
@@ -38,8 +38,9 @@ public class FileParser implements FileParse {
                     String line = fileLine.replaceAll("([.,?!:;()@#$%&^<>'])", "");
 
                     Statistics statisticsItem = new Statistics(getLineLongestWord(line),
-                            getLineShortestWord(line), fileLine.length(), getLineWordsNumber(line),
-                            getLineAverageWordLength(line), getLineDuplicates(line));
+                            getLineShortestWord(line), fileLine.length(),
+                            getLineWordsNumber(line), getLineAverageWordLength(line),
+                            getNonSpaceSymbolQuantity(line), getLineDuplicates(line));
                     statistics.add(statisticsItem);
                 }
             }
@@ -48,7 +49,8 @@ public class FileParser implements FileParse {
     }
 
     @Override
-    public Optional<Statistics> calculateWholeFileStatistics(List<Statistics> linesStatistics) {
+    public Optional<Statistics> calculateFileStatistics(
+            List<Statistics> linesStatistics, List<String> fileLines) {
         if (linesStatistics == null || linesStatistics.isEmpty()) {
             return Optional.empty();
         } else {
@@ -65,57 +67,49 @@ public class FileParser implements FileParse {
                     .mapToInt(Statistics::getWordsQuantity)
                     .sum();
 
-            int averageFileWordLength = getAverageFileWordLength(linesStatistics,
-                    fileWordsQuantity);
+            int averageFileWordLength = getAverageFileWordLength(linesStatistics);
 
-            List<WordDuplication> wordFileDuplications = getWordFileDuplications(linesStatistics);
+            List<WordDuplication> wordFileDuplications
+                    = getFileWordDuplications(fileLines);
 
             Statistics statistics = new Statistics(longestFileWord, shortestFileWord,
-                    lineFileLength, fileWordsQuantity, averageFileWordLength, wordFileDuplications);
+                    lineFileLength, fileWordsQuantity, averageFileWordLength,
+                    getFileNonSpaceSymbolQuantity(linesStatistics), wordFileDuplications);
 
             return Optional.of(statistics);
         }
+    }
+
+    private int getNonSpaceSymbolQuantity(String line) {
+        return line.replaceAll("\\s", "").length();
     }
 
     private int getLineWordsNumber(String line) {
         return line.split("\\s").length;
     }
 
-    private int getAverageFileWordLength(List<Statistics> linesStatistics, int fileWordsQuantity) {
-        int averageFileWordLength = 0;
-        if (fileWordsQuantity != 0) {
-            averageFileWordLength = linesStatistics
-                    .stream()
-                    .mapToInt(Statistics::getAverageWordLength)
-                    .sum() / fileWordsQuantity;
-        }
-        return averageFileWordLength;
+    private int getFileNonSpaceSymbolQuantity(List<Statistics> linesStatistics) {
+        return linesStatistics
+                .stream()
+                .mapToInt(Statistics::getNonSpaceSymbolQuantity)
+                .sum();
     }
 
-    private List<WordDuplication> getWordFileDuplications(List<Statistics> linesStatistics) {
-        List<WordDuplication> tempFileDuplications = new ArrayList<>();
-        List<WordDuplication> wordFileDuplications = new ArrayList<>();
-        linesStatistics
+    private int getAverageFileWordLength(List<Statistics> linesStatistics) {
+        return getFileNonSpaceSymbolQuantity(linesStatistics)
+                / linesStatistics
                 .stream()
-                .map(Statistics::getWordDuplications)
-                .forEachOrdered(tempFileDuplications::addAll);
+                .mapToInt(Statistics::getWordsQuantity)
+                .sum();
+    }
 
-        for (int i = 0; i < tempFileDuplications.size(); i++) {
-            if (!tempFileDuplications.get(i).getDuplicate().equals("")) {
-                wordFileDuplications.add(tempFileDuplications.get(i));
-            } else {
-                continue;
-            }
-            for (int j = i + 1; j < tempFileDuplications.size(); j++) {
-                if (wordFileDuplications.get(i).getDuplicate()
-                        .equals(tempFileDuplications.get(j).getDuplicate())) {
-                    wordFileDuplications.get(i).setQuantity(wordFileDuplications.get(i)
-                            .getQuantity() + tempFileDuplications.get(j).getQuantity());
-                    tempFileDuplications.get(j).setDuplicate("");
-                }
-            }
+    private List<WordDuplication> getFileWordDuplications(List<String> fileLines) {
+        StringBuilder allLinesInOne = new StringBuilder();
+        for (String fileLine : fileLines) {
+            allLinesInOne.append(fileLine);
+            allLinesInOne.append(" ");
         }
-        return wordFileDuplications;
+        return getLineDuplicates(allLinesInOne.toString().trim());
     }
 
     private String getLongestFileWord(List<Statistics> linesStatistics) {
@@ -180,7 +174,7 @@ public class FileParser implements FileParse {
         }
         Arrays.sort(words);
         for (int i = 0; i < words.length - 1; i++) {
-            if (words[i].equals(words[i + 1])) {
+            if (words[i].equals(words[i + 1]) && (!words[i].equals(""))) {
                 wordDuplications.add(new WordDuplication());
                 wordDuplications.get(wordDuplications.size() - 1).setDuplicate(words[i]);
                 wordDuplications.get(wordDuplications.size() - 1).incrementQuantity();

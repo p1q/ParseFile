@@ -29,7 +29,7 @@ public class FileParserTest {
         FileParse fileParse = new FileParser();
         List<String> fileLines = new ArrayList<>();
 
-        assertEquals(Optional.empty(), fileParse.calculateStatistics(fileLines));
+        assertEquals(Optional.empty(), fileParse.calculateLineStatistics(fileLines));
     }
 
     @Test
@@ -37,14 +37,14 @@ public class FileParserTest {
         FileParse fileParse = new FileParser();
         List<String> fileLines = null;
 
-        assertEquals(Optional.empty(), fileParse.calculateStatistics(fileLines));
+        assertEquals(Optional.empty(), fileParse.calculateLineStatistics(fileLines));
     }
 
     @Test
-    public void calculateFullStatisticsOfBundledDemoFile() {
+    public void calculateLinesStatisticsOfBundledDemoFile() {
         FileParse fileParse = new FileParser();
         List<String> fileLines = getListWithFileLines();
-        List<Statistics> statistics = fileParse.calculateStatistics(fileLines).get();
+        List<Statistics> statistics = fileParse.calculateLineStatistics(fileLines).get();
 
         assertEquals("integrity", statistics.get(0).getLongestWord());
         assertEquals("of", statistics.get(0).getShortestWord());
@@ -56,6 +56,86 @@ public class FileParserTest {
         assertEquals(2, statistics.get(0).getWordDuplications().get(1).getQuantity());
         assertEquals("the", statistics.get(0).getWordDuplications().get(2).getDuplicate());
         assertEquals(4, statistics.get(0).getWordDuplications().get(2).getQuantity());
+    }
+
+    @Test
+    public void calculateLinesStatisticsOfGivenLines() {
+        FileParse fileParse = new FileParser();
+        List<String> fileLines = getListWithGivenLines();
+        List<Statistics> statistics = fileParse.calculateLineStatistics(fileLines).get();
+
+        assertEquals("", statistics.get(0).getLongestWord());
+        assertEquals("", statistics.get(0).getShortestWord());
+        assertEquals(0, statistics.get(0).getLineLength());
+        assertEquals(0, statistics.get(0).getAverageWordLength());
+
+        assertEquals("zzz", statistics.get(1).getLongestWord());
+        assertEquals("zzz", statistics.get(1).getShortestWord());
+        assertEquals(55, statistics.get(1).getLineLength());
+        assertEquals(3, statistics.get(1).getAverageWordLength());
+        assertEquals("aaa", statistics.get(1).getWordDuplications().get(0).getDuplicate());
+        assertEquals(3, statistics.get(1).getWordDuplications().get(0).getQuantity());
+        assertEquals("bbb", statistics.get(1).getWordDuplications().get(1).getDuplicate());
+        assertEquals(3, statistics.get(1).getWordDuplications().get(1).getQuantity());
+        assertEquals("zzz", statistics.get(1).getWordDuplications().get(2).getDuplicate());
+        assertEquals(4, statistics.get(1).getWordDuplications().get(2).getQuantity());
+
+        assertEquals("LongestWord", statistics.get(2).getLongestWord());
+        assertEquals("SW", statistics.get(2).getShortestWord());
+        assertEquals(66, statistics.get(2).getLineLength());
+        assertEquals(3, statistics.get(2).getAverageWordLength());
+        assertEquals("aaa", statistics.get(2).getWordDuplications().get(0).getDuplicate());
+        assertEquals(3, statistics.get(2).getWordDuplications().get(0).getQuantity());
+        assertEquals("bbb", statistics.get(2).getWordDuplications().get(1).getDuplicate());
+        assertEquals(3, statistics.get(2).getWordDuplications().get(1).getQuantity());
+        assertEquals("zzz", statistics.get(2).getWordDuplications().get(2).getDuplicate());
+        assertEquals(4, statistics.get(2).getWordDuplications().get(2).getQuantity());
+    }
+
+    @Test
+    public void calculateFileStatisticsOfGivenLines() {
+        FileParse fileParse = new FileParser();
+        List<String> fileLines = getListWithGivenLines();
+        List<Statistics> linesStatistics = fileParse.calculateLineStatistics(fileLines).get();
+        Statistics wholeFileStatistics
+                = fileParse.calculateFileStatistics(linesStatistics, getListWithGivenLines()).get();
+
+        assertEquals("LongestWord", wholeFileStatistics.getLongestWord());
+        assertEquals("", wholeFileStatistics.getShortestWord());
+        assertEquals(170, wholeFileStatistics.getLineLength());
+        assertEquals(2, wholeFileStatistics.getAverageWordLength());
+        assertEquals("aaa", wholeFileStatistics.getWordDuplications().get(0).getDuplicate());
+        assertEquals(9, wholeFileStatistics.getWordDuplications().get(0).getQuantity());
+        assertEquals("bbb", wholeFileStatistics.getWordDuplications().get(1).getDuplicate());
+        assertEquals(8, wholeFileStatistics.getWordDuplications().get(1).getQuantity());
+        assertEquals("fds", wholeFileStatistics.getWordDuplications().get(2).getDuplicate());
+        assertEquals(2, wholeFileStatistics.getWordDuplications().get(2).getQuantity());
+        assertEquals("ghy", wholeFileStatistics.getWordDuplications().get(3).getDuplicate());
+        assertEquals(2, wholeFileStatistics.getWordDuplications().get(3).getQuantity());
+        assertEquals("jkd", wholeFileStatistics.getWordDuplications().get(4).getDuplicate());
+        assertEquals(2, wholeFileStatistics.getWordDuplications().get(4).getQuantity());
+        assertEquals("uuu", wholeFileStatistics.getWordDuplications().get(5).getDuplicate());
+        assertEquals(2, wholeFileStatistics.getWordDuplications().get(5).getQuantity());
+        assertEquals("zzz", wholeFileStatistics.getWordDuplications().get(6).getDuplicate());
+        assertEquals(9, wholeFileStatistics.getWordDuplications().get(6).getQuantity());
+    }
+
+    private List<String> getListWithGivenLines() {
+        List<String> fileLines = new ArrayList<>();
+        fileLines.add("");
+        fileLines.add("aaa aaa kkk aaa ghy jkd bbb bbb bbb fds zzz zzz zzz zzz");
+        fileLines.add("LongestWord aaa aaa aaa ghy jkd bbb bbb bbb fds zzz zzz zzz zzz SW");
+        fileLines.add("aaa aaa");
+        fileLines.add("");
+        fileLines.add("");
+        fileLines.add("zzz bbb");
+        fileLines.add("fff bbb uuu uuu");
+        fileLines.add("ooo sss");
+        fileLines.add("aaa");
+        fileLines.add("qqq");
+        fileLines.add("       ");
+        fileLines.add("");
+        return fileLines;
     }
 
     private List<String> getListWithFileLines() {
