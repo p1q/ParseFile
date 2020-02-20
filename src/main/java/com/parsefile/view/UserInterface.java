@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 public class UserInterface {
-    public static final int MENU_ITEM_NUMBER = 8;
+    public static final int MENU_ITEM_NUMBER = 5;
     private static final Logger LOGGER = Logger.getLogger(UserInterface.class);
 
     public void showMenu() {
