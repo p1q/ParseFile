@@ -1,6 +1,5 @@
 package com.parsefile.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Statistics {
@@ -9,15 +8,18 @@ public class Statistics {
     private int lineLength;
     private int wordsQuantity;
     private int averageWordLength;
-    private List<WordDuplication> wordDuplications = new ArrayList<>();
+    private int nonSpaceSymbolQuantity;
+    private List<WordDuplication> wordDuplications;
 
-    public Statistics(String longestWord, String shortestWord, int lineLength, int wordsQuantity,
-                      int averageWordLength, List<WordDuplication> wordDuplications) {
+    public Statistics(String longestWord, String shortestWord, int lineLength,
+                      int wordsQuantity, int averageWordLength, int nonSpaceSymbolQuantity,
+                      List<WordDuplication> wordDuplications) {
         this.longestWord = longestWord;
         this.shortestWord = shortestWord;
         this.lineLength = lineLength;
         this.wordsQuantity = wordsQuantity;
         this.averageWordLength = averageWordLength;
+        this.nonSpaceSymbolQuantity = nonSpaceSymbolQuantity;
         this.wordDuplications = wordDuplications;
     }
 
@@ -63,6 +65,14 @@ public class Statistics {
 
     public void setWordsQuantity(int wordsQuantity) {
         this.wordsQuantity = wordsQuantity;
+    }
+
+    public int getNonSpaceSymbolQuantity() {
+        return nonSpaceSymbolQuantity;
+    }
+
+    public void setNonSpaceSymbolQuantity(int nonSpaceSymbolQuantity) {
+        this.nonSpaceSymbolQuantity = nonSpaceSymbolQuantity;
     }
 
     public void setWordDuplications(List<WordDuplication> wordDuplications) {
