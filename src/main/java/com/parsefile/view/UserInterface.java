@@ -18,12 +18,8 @@ public class UserInterface {
         System.out.println("              1. Open a file.                                ");
         System.out.println("              2. Show current file contents.                 ");
         System.out.println("              3. Calculate statistics.                       ");
-        System.out.println("              4. Show statistics for each line.              ");
-        System.out.println("              5. Show statistics for the whole file.         ");
-        System.out.println("              6. Save data to the database.                  ");
-        System.out.println("              7. Load data from the database.                ");
-        System.out.println("              8. Clear database.                             ");
-        System.out.println("              9. Exit.                                       ");
+        System.out.println("              4. Save data to the database.                  ");
+        System.out.println("              5. Exit.                                       ");
         System.out.println("                                                             ");
         System.out.printf("Please choose a menu item (1-%d inclusive): ", MENU_ITEM_NUMBER);
     }

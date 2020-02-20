@@ -71,19 +71,9 @@ public class Main {
                     break;
 
                 case 5:
-                    if (fileStatistics == null) {
-                        UserInterface.showCalculateStatisticsMessage();
-                    }
+
                     break;
 
-                case 6:
-                    break;
-
-                case 7:
-                    break;
-
-                case 8:
-                    break;
                 default:
                     UserInterface.showUnexpectedValueMessage(menuItem);
             }
