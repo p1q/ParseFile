@@ -7,17 +7,19 @@ public class Statistics {
     private String longestWord;
     private String shortestWord;
     private int lineLength;
+    private int wordsQuantity;
     private int averageWordLength;
     private List<WordDuplication> wordDuplications = new ArrayList<>();
 
     public Statistics() {
     }
 
-    public Statistics(String longestWord, String shortestWord, int lineLength,
+    public Statistics(String longestWord, String shortestWord, int lineLength, int wordsQuantity,
                       int averageWordLength, List<WordDuplication> wordDuplications) {
         this.longestWord = longestWord;
         this.shortestWord = shortestWord;
         this.lineLength = lineLength;
+        this.wordsQuantity = wordsQuantity;
         this.averageWordLength = averageWordLength;
         this.wordDuplications = wordDuplications;
     }
@@ -56,6 +58,14 @@ public class Statistics {
 
     public List<WordDuplication> getWordDuplications() {
         return wordDuplications;
+    }
+
+    public int getWordsQuantity() {
+        return wordsQuantity;
+    }
+
+    public void setWordsQuantity(int wordsQuantity) {
+        this.wordsQuantity = wordsQuantity;
     }
 
     public void setWordDuplications(List<WordDuplication> wordDuplications) {
