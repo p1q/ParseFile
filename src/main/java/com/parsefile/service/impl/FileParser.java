@@ -1,5 +1,6 @@
 package com.parsefile.service.impl;
 
+import com.parsefile.dao.StatisticsDao;
 import com.parsefile.model.Statistics;
 import com.parsefile.model.WordDuplication;
 import com.parsefile.service.FileParse;
@@ -189,8 +190,24 @@ public class FileParser implements FileParse {
     }
 
     @Override
-    public void saveStatistics(List<Statistics> linesStatistics, Statistics fileStatistics) {
+    public void saveData(List<String> fileLines, List<Statistics> linesStatistics,
+                  Statistics fileStatistics) {
         FactoryJdbc factoryJdbc = new FactoryJdbc();
+        saveFileLines(fileLines);
+    }
+
+    private void saveFileLines(List<String> fileLines) {
+        StatisticsDao statisticsDao = FactoryJdbc.getStatisticsDao();
+        for (int i = 0; i < fileLines.size(); i++) {
+            statisticsDao.addLine(fileLines.get(i));
+        }
+
+    }
+
+    private void saveStatistics(List<Statistics> linesStatistics, Statistics fileStatistics) {
+
+        StatisticsDao statisticsDao = FactoryJdbc.getStatisticsDao();
+
 
     }
 }

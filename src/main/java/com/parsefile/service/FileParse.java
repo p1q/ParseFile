@@ -12,5 +12,6 @@ public interface FileParse {
     Optional<Statistics> calculateFileStatistics(List<Statistics> linesStatistics,
                                                  List<String> fileLines);
 
-    void saveStatistics(List<Statistics> linesStatistics, Statistics fileStatistics);
+    void saveData(List<String> fileLines, List<Statistics> linesStatistics,
+                  Statistics fileStatistics);
 }

@@ -68,7 +68,7 @@ public class Main {
                     if (linesStatistics == null || fileStatistics == null) {
                         UserInterface.showCalculateStatisticsMessage();
                     } else {
-                        fileParse.saveStatistics(linesStatistics, fileStatistics);
+                        fileParse.saveData(fileLines, linesStatistics, fileStatistics);
                     }
                     break;
 
