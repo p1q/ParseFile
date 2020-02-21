@@ -3,6 +3,7 @@ package com.parsefile.service.impl;
 import com.parsefile.model.Statistics;
 import com.parsefile.model.WordDuplication;
 import com.parsefile.service.FileParse;
+import com.parsefile.util.FactoryJdbc;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -185,5 +186,11 @@ public class FileParser implements FileParse {
             }
         }
         return wordDuplications;
+    }
+
+    @Override
+    public void saveStatistics(List<Statistics> linesStatistics, Statistics fileStatistics) {
+        FactoryJdbc factoryJdbc = new FactoryJdbc();
+
     }
 }
