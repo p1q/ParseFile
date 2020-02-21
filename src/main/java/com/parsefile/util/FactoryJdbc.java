@@ -10,11 +10,11 @@ import java.sql.SQLException;
 
 public class FactoryJdbc {
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String DATABASE_NAME = "sql3324004";
-    private static final String DATABASE_URL = "jdbc:mysql://sql3.freemysqlhosting.net/"
+    private static final String DATABASE_NAME = "parsefile";
+    private static final String DATABASE_URL = "jdbc:mysql://178.136.201.61/"
             + DATABASE_NAME + "?allowMultiQueries=true";
-    private static final String USER = "sql3324004";
-    private static final String PASSWORD = "VDJpLcuK14";
+    private static final String USER = "parsefile";
+    private static final String PASSWORD = "LujCMJd75Cx5C4qS";
     private static final Logger LOGGER = Logger.getLogger(FactoryJdbc.class);
 
     private static Connection connection;
