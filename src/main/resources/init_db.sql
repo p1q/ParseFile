@@ -1,14 +1,10 @@
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+DROP DATABASE IF EXISTS parsefile;
 
-SET NAMES 'utf8';
-
-DROP DATABASE IF EXISTS sql3324004;
-
-CREATE DATABASE IF NOT EXISTS sql3324004
+CREATE DATABASE IF NOT EXISTS parsefile
     CHARACTER SET utf8
     COLLATE utf8_unicode_ci;
 
-USE sql3324004;
+USE parsefile;
 
 CREATE TABLE IF NOT EXISTS `lines` (
                                        line_id int(11) NOT NULL AUTO_INCREMENT,
@@ -73,4 +69,7 @@ ALTER TABLE duplications
     ADD CONSTRAINT `statistics-duplicates_fk` FOREIGN KEY (duplicate_id)
         REFERENCES statistics (statistics_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+CREATE USER 'parsefile'@'%' IDENTIFIED WITH mysql_native_password;
+GRANT USAGE ON *.* TO 'parsefile'@'%'
+    REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+SET PASSWORD FOR 'parsefile'@'%' = 'LujCMJd75Cx5C4qS';GRANT ALL PRIVILEGES ON `parsefile`.* TO 'parsefile'@'%';
