@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `lines` (
                                        PRIMARY KEY (line_id)
 )
     ENGINE = INNODB,
-    AUTO_INCREMENT = 84,
+    AUTO_INCREMENT = 92,
     AVG_ROW_LENGTH = 16384,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `statistics-of-line` (
                                                     PRIMARY KEY (statistics_id)
 )
     ENGINE = INNODB,
+    AUTO_INCREMENT = 9,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
@@ -57,18 +58,18 @@ CREATE TABLE IF NOT EXISTS `duplicates-in-line` (
                                                     duplicate_id int(11) NOT NULL AUTO_INCREMENT,
                                                     duplicate varchar(128) DEFAULT NULL,
                                                     quantity int(11) DEFAULT NULL,
-                                                    line_id int(11) NOT NULL,
-                                                    PRIMARY KEY (duplicate_id, line_id)
+                                                    `line-statistics_id` int(11) NOT NULL,
+                                                    PRIMARY KEY (duplicate_id)
 )
     ENGINE = INNODB,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
 ALTER TABLE `duplicates-in-line`
-    ADD INDEX `statistics-duplicates_idx` (duplicate_id);
+    ADD INDEX `line-duplicates_line-statistics_fk_idx` (`line-statistics_id`);
 
 ALTER TABLE `duplicates-in-line`
-    ADD CONSTRAINT `statistics-duplicates_fk` FOREIGN KEY (duplicate_id)
+    ADD CONSTRAINT `line-duplicates_line-statistics_fk` FOREIGN KEY (`line-statistics_id`)
         REFERENCES `statistics-of-line` (statistics_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 CREATE TABLE IF NOT EXISTS `statistics-of-file` (
@@ -82,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `statistics-of-file` (
                                                     PRIMARY KEY (statistics_id)
 )
     ENGINE = INNODB,
-    AUTO_INCREMENT = 3,
+    AUTO_INCREMENT = 4,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `duplicates-in-file` (
                                                     PRIMARY KEY (duplicate_id)
 )
     ENGINE = INNODB,
-    AUTO_INCREMENT = 8,
+    AUTO_INCREMENT = 15,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
