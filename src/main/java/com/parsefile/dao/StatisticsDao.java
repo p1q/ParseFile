@@ -3,7 +3,7 @@ package com.parsefile.dao;
 import com.parsefile.model.Statistics;
 
 public interface StatisticsDao {
-    void addLine(String line);
-    void addLineStatistics(Statistics statistics);
+    int addLine(String line);
+    int addLineStatistics(Statistics statistics, int lineId);
     void addFileStatistics(Statistics statistics);
 }
