@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `lines` (
                                        PRIMARY KEY (line_id)
 )
     ENGINE = INNODB,
-    AUTO_INCREMENT = 92,
+    AUTO_INCREMENT = 132,
     AVG_ROW_LENGTH = 16384,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
@@ -27,50 +27,39 @@ CREATE TABLE IF NOT EXISTS `statistics-of-line` (
                                                     words_quantity int(11) DEFAULT NULL,
                                                     average_word_length int(11) DEFAULT NULL,
                                                     non_space_symbol_quantity int(11) DEFAULT NULL,
+                                                    line_id int(11) NOT NULL,
                                                     PRIMARY KEY (statistics_id)
 )
     ENGINE = INNODB,
-    AUTO_INCREMENT = 9,
+    AUTO_INCREMENT = 40,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `lines_statistics-of-line` (
-                                                          line_id int(11) NOT NULL,
-                                                          `statistics-of-line_id` int(11) NOT NULL,
-                                                          PRIMARY KEY (line_id, `statistics-of-line_id`)
-)
-    ENGINE = INNODB,
-    CHARACTER SET utf8,
-    COLLATE utf8_unicode_ci;
+ALTER TABLE `statistics-of-line`
+    ADD INDEX `statistics-line_fk_idx` (line_id);
 
-ALTER TABLE `lines_statistics-of-line`
-    ADD INDEX `statistics-of-line_fk_idx` (`statistics-of-line_id`);
-
-ALTER TABLE `lines_statistics-of-line`
-    ADD CONSTRAINT `statistics-of-line_fk` FOREIGN KEY (`statistics-of-line_id`)
-        REFERENCES `statistics-of-line` (statistics_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-ALTER TABLE `lines_statistics-of-line`
-    ADD CONSTRAINT line_fk FOREIGN KEY (line_id)
+ALTER TABLE `statistics-of-line`
+    ADD CONSTRAINT `statistics-line_fk` FOREIGN KEY (line_id)
         REFERENCES `lines` (line_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 CREATE TABLE IF NOT EXISTS `duplicates-in-line` (
                                                     duplicate_id int(11) NOT NULL AUTO_INCREMENT,
                                                     duplicate varchar(128) DEFAULT NULL,
                                                     quantity int(11) DEFAULT NULL,
-                                                    `line-statistics_id` int(11) NOT NULL,
+                                                    line_id int(11) NOT NULL,
                                                     PRIMARY KEY (duplicate_id)
 )
     ENGINE = INNODB,
+    AUTO_INCREMENT = 13,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
 ALTER TABLE `duplicates-in-line`
-    ADD INDEX `line-duplicates_line-statistics_fk_idx` (`line-statistics_id`);
+    ADD INDEX `line-duplicates_fk_idx` (line_id);
 
 ALTER TABLE `duplicates-in-line`
-    ADD CONSTRAINT `line-duplicates_line-statistics_fk` FOREIGN KEY (`line-statistics_id`)
-        REFERENCES `statistics-of-line` (statistics_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ADD CONSTRAINT `line-duplicates_fk` FOREIGN KEY (line_id)
+        REFERENCES `lines` (line_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 CREATE TABLE IF NOT EXISTS `statistics-of-file` (
                                                     statistics_id int(11) NOT NULL AUTO_INCREMENT,
@@ -83,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `statistics-of-file` (
                                                     PRIMARY KEY (statistics_id)
 )
     ENGINE = INNODB,
-    AUTO_INCREMENT = 4,
+    AUTO_INCREMENT = 8,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
@@ -94,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `duplicates-in-file` (
                                                     PRIMARY KEY (duplicate_id)
 )
     ENGINE = INNODB,
-    AUTO_INCREMENT = 15,
+    AUTO_INCREMENT = 41,
     CHARACTER SET utf8,
     COLLATE utf8_unicode_ci;
 
