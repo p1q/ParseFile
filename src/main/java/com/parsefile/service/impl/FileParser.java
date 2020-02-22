@@ -195,6 +195,6 @@ public class FileParser implements FileParse {
         StatisticsDao statisticsDao = FactoryJdbc.getStatisticsDao();
         fileLines.forEach(statisticsDao::addLine);
         statisticsDao.addFileStatistics(fileStatistics);
-        //linesStatistics.forEach(statisticsDao::addLinesStatistics);
+        linesStatistics.forEach(statisticsDao::addLineStatistics);
     }
 }

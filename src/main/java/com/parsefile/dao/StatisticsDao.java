@@ -4,6 +4,6 @@ import com.parsefile.model.Statistics;
 
 public interface StatisticsDao {
     void addLine(String line);
-    void addLinesStatistics(Statistics statistics);
+    void addLineStatistics(Statistics statistics);
     void addFileStatistics(Statistics statistics);
 }

@@ -62,7 +62,7 @@ public class StatisticsDaoJdbcImpl implements StatisticsDao {
     }
 
     @Override
-    public void addLinesStatistics(Statistics statistics) {
+    public void addLineStatistics(Statistics statistics) {
         String query = "INSERT INTO `statistics-of-line` (`longest_word`, `shortest_word`,"
                 + " `line_length`, `words_quantity`, `average_word_length`,"
                 + " `non_space_symbol_quantity`) VALUES (?, ?, ?, ?, ?, ?);";
