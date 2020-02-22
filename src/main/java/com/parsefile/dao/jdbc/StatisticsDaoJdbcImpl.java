@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class StatisticsDaoJdbcImpl implements StatisticsDao {
     private static final Logger LOGGER = Logger.getLogger(StatisticsDaoJdbcImpl.class);
@@ -20,25 +19,58 @@ public class StatisticsDaoJdbcImpl implements StatisticsDao {
 
     @Override
     public void addLine(String line) {
-        String query = "INSERT INTO `lines` (content) VALUES (?);";
+        String query = "INSERT INTO `lines` (`content`) VALUES (?);";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query,
-                Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, line);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                LOGGER.error("Failed to add the line.");
+                throw new SQLException("Failed to add the line.");
+            }
         } catch (SQLException e) {
             LOGGER.error(e);
         }
     }
 
     @Override
-    public void addStatistics(Statistics statistics) {
-        String query = "INSERT INTO statistics (longest_word, shortest_word, line_length," +
-                " words_quantity, average_word_length, non_space_symbol_quantity)" +
-                " VALUES (?, ?, ?, ?, ?, ?);";
-        //long userRoleId = 0;
+    public void addFileStatistics(Statistics statistics) {
+        String query = "INSERT INTO `statistics-of-file` (`longest_word`, `shortest_word`,"
+                + " `line_length`, `words_quantity`, `average_word_length`,"
+                + " `non_space_symbol_quantity`) VALUES (?, ?, ?, ?, ?, ?);";
+        addStatistics(statistics, query);
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query,
-                Statement.RETURN_GENERATED_KEYS)) {
+        for (int i = 0; i < statistics.getWordDuplications().size(); i++) {
+            String addDuplicatesQuery = "INSERT INTO `duplicates-in-file` (`duplicate`, `quantity`)"
+                    + "VALUES (?, ?);";
+            try (PreparedStatement preparedStatement = connection
+                    .prepareStatement(addDuplicatesQuery)) {
+                preparedStatement.setString(1,
+                        statistics.getWordDuplications().get(i).getDuplicate());
+                preparedStatement.setInt(2,
+                        statistics.getWordDuplications().get(i).getQuantity());
+
+                int affectedRows = preparedStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    LOGGER.error("Failed to add the duplicate of the word.");
+                    throw new SQLException("Failed to add the duplicate of the word.");
+                }
+            } catch (SQLException e) {
+                LOGGER.error(e);
+            }
+        }
+    }
+
+    @Override
+    public void addLinesStatistics(Statistics statistics) {
+        String query = "INSERT INTO `statistics-of-line` (`longest_word`, `shortest_word`,"
+                + " `line_length`, `words_quantity`, `average_word_length`,"
+                + " `non_space_symbol_quantity`) VALUES (?, ?, ?, ?, ?, ?);";
+        addStatistics(statistics, query);
+    }
+
+    private void addStatistics(Statistics statistics, String query) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, statistics.getLongestWord());
             preparedStatement.setString(2, statistics.getShortestWord());
             preparedStatement.setInt(3, statistics.getLineLength());
@@ -48,8 +80,8 @@ public class StatisticsDaoJdbcImpl implements StatisticsDao {
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                LOGGER.error("Failed to add the statistics.");
-                throw new SQLException("Failed to add the statistics.");
+                LOGGER.error("Failed to add statistics.");
+                throw new SQLException("Failed to add statistics.");
             }
 /*
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
@@ -84,5 +116,7 @@ public class StatisticsDaoJdbcImpl implements StatisticsDao {
         */
 
     }
+
+
 
 }

@@ -192,22 +192,9 @@ public class FileParser implements FileParse {
     @Override
     public void saveData(List<String> fileLines, List<Statistics> linesStatistics,
                   Statistics fileStatistics) {
-        FactoryJdbc factoryJdbc = new FactoryJdbc();
-        saveFileLines(fileLines);
-    }
-
-    private void saveFileLines(List<String> fileLines) {
         StatisticsDao statisticsDao = FactoryJdbc.getStatisticsDao();
-        for (int i = 0; i < fileLines.size(); i++) {
-            statisticsDao.addLine(fileLines.get(i));
-        }
-
-    }
-
-    private void saveStatistics(List<Statistics> linesStatistics, Statistics fileStatistics) {
-
-        StatisticsDao statisticsDao = FactoryJdbc.getStatisticsDao();
-
-
+        fileLines.forEach(statisticsDao::addLine);
+        statisticsDao.addFileStatistics(fileStatistics);
+        //linesStatistics.forEach(statisticsDao::addLinesStatistics);
     }
 }
