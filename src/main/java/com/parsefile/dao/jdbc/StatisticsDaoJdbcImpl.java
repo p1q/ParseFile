@@ -49,15 +49,33 @@ public class StatisticsDaoJdbcImpl implements StatisticsDao {
     }
 
     @Override
-    public int addLineStatistics(Statistics statistics, int lineId) {
+    public void addLineStatistics(Statistics statistics, int lineId) {
         String query = "INSERT INTO `statistics-of-line` (`longest_word`, `shortest_word`,"
                 + " `line_length`, `words_quantity`, `average_word_length`,"
-                + " `non_space_symbol_quantity`) VALUES (?, ?, ?, ?, ?, ?);";
-        int statisticId = addStatistics(statistics, query);
+                + " `non_space_symbol_quantity`, `line_id`) VALUES (?, ?, ?, ?, ?, ?, ?);";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query,
+                Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, statistics.getLongestWord());
+            preparedStatement.setString(2, statistics.getShortestWord());
+            preparedStatement.setInt(3, statistics.getLineLength());
+            preparedStatement.setInt(4, statistics.getWordsQuantity());
+            preparedStatement.setInt(5, statistics.getAverageWordLength());
+            preparedStatement.setInt(6, statistics.getNonSpaceSymbolQuantity());
+            preparedStatement.setInt(7, lineId);
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                LOGGER.error("Failed to add statistics.");
+                throw new SQLException("Failed to add statistics.");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        }
+
         for (int i = 0; i < statistics.getWordDuplications().size(); i++) {
             addDuplicateLine(statistics.getWordDuplications().get(i), lineId);
         }
-        return statisticId;
     }
 
     @Override
@@ -65,7 +83,25 @@ public class StatisticsDaoJdbcImpl implements StatisticsDao {
         String query = "INSERT INTO `statistics-of-file` (`longest_word`, `shortest_word`,"
                 + " `line_length`, `words_quantity`, `average_word_length`,"
                 + " `non_space_symbol_quantity`) VALUES (?, ?, ?, ?, ?, ?);";
-        addStatistics(statistics, query);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query,
+                Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, statistics.getLongestWord());
+            preparedStatement.setString(2, statistics.getShortestWord());
+            preparedStatement.setInt(3, statistics.getLineLength());
+            preparedStatement.setInt(4, statistics.getWordsQuantity());
+            preparedStatement.setInt(5, statistics.getAverageWordLength());
+            preparedStatement.setInt(6, statistics.getNonSpaceSymbolQuantity());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                LOGGER.error("Failed to add statistics.");
+                throw new SQLException("Failed to add statistics.");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        }
+
         for (int i = 0; i < statistics.getWordDuplications().size(); i++) {
             addDuplicateFile(statistics.getWordDuplications().get(i));
         }
@@ -107,36 +143,5 @@ public class StatisticsDaoJdbcImpl implements StatisticsDao {
         } catch (SQLException e) {
             LOGGER.error(e);
         }
-    }
-
-    private int addStatistics(Statistics statistics, String query) {
-        int statisticsId = 0;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query,
-                Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, statistics.getLongestWord());
-            preparedStatement.setString(2, statistics.getShortestWord());
-            preparedStatement.setInt(3, statistics.getLineLength());
-            preparedStatement.setInt(4, statistics.getWordsQuantity());
-            preparedStatement.setInt(5, statistics.getAverageWordLength());
-            preparedStatement.setInt(6, statistics.getNonSpaceSymbolQuantity());
-
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows == 0) {
-                LOGGER.error("Failed to add statistics.");
-                throw new SQLException("Failed to add statistics.");
-            }
-
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    statisticsId = generatedKeys.getInt(1);
-                } else {
-                    LOGGER.error("Error obtaining statistics ID.");
-                    throw new SQLException("Error obtaining statistics ID.");
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        }
-        return statisticsId;
     }
 }

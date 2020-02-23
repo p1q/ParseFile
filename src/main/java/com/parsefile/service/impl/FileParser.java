@@ -196,7 +196,7 @@ public class FileParser implements FileParse {
 
         for (int i = 0; i < fileLines.size(); i++) {
             int lineId = statisticsDao.addLine(fileLines.get(i));
-            int statisticsId = statisticsDao.addLineStatistics(linesStatistics.get(i), lineId);
+            statisticsDao.addLineStatistics(linesStatistics.get(i), lineId);
         }
 
         statisticsDao.addFileStatistics(fileStatistics);
