@@ -19,7 +19,7 @@ How to run the application with maven:
 3. Install and configure MySQL database. Or you are free to use provided public server 178.136.201.61 with phpMyAdmin for testing purpose (for your convenience all connection data are hardcoded). 
 4. Run bundled init_db.sql file in your database to initialize it. This step is already done for provided MySQL server.
 5. Go to a folder in your file system and clone project from GitHub into this folder with command
-   <code>git clone https://github.com/p1q/ParseFile.git</code>
+   <br /><code>git clone https://github.com/p1q/ParseFile.git</code>
 8. That's all! You can run it.
 
 ## :warning: Please Note
