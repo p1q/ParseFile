@@ -14,9 +14,10 @@
 
 ## :rocket: Project Deployment
 How to run the application with maven:
-1. Install JDK or JRE latest version and set correct JAVA_HOME variable
-2. Install Git (distributed version control system)
-3. Install and configure MySQL database. Or you are free to use provided public server 178.136.201.61 with phpMyAdmin for testing purpose (for your convenience all connection data are hardcoded). 
+1. Install JDK or JRE latest version and set correct JAVA_HOME variable.
+2. Install Git (distributed version control system).
+3. Install and configure MySQL database.
+   <br />Or you are free to use provided public server 178.136.201.61 with phpMyAdmin for testing purpose (for your convenience all connection data are hardcoded). 
 4. Run bundled init_db.sql file in your database to initialize it. This step is already done for provided MySQL server.
 5. Go to a folder in your file system and clone project from GitHub into this folder with command
    <br /><code>git clone https://github.com/p1q/ParseFile.git</code>
