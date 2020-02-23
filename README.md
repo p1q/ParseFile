@@ -35,8 +35,7 @@ How to run the application with maven:
 
 ## :warning: Please Note
 While coding some assumptions were made because of possible twofold understanding of some task details:
-- Opened file doesn't include very special symbols. The file will be cleaned of this symbols:  .,?!:;()@#$%&^<>'
-  but if it has something else, in that case the statistics can be inaccurate. 
+- Opened file doesn't include very special symbols. The file will be cleaned of this symbols: <code>.,?!:;()@#$%&^<>'</code> but if it has something else, in that case the statistics can be inaccurate. 
 - Shortest and longest words can be "".
 - Two words with different letter case are considered as different words (e.g. "Sample" and "sample").
 - Line length for the whole file is considered as sum of all its lines.
