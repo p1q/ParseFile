@@ -82,4 +82,8 @@ public class UserInterface {
     public static void showStatisticsCalculationErrorMessage() {
         System.out.println("An error while statistic calculation was occurred!");
     }
+
+    public static void showExitConfirmationMessage() {
+        System.out.print("Are you sure you want to quit? All unsaved data will be lost! ('y' - Exit, any other - Continue working): ");
+    }
 }

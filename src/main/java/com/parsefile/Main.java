@@ -73,16 +73,20 @@ public class Main {
                     break;
 
                 case 5:
-
+                    UserInterface.showExitConfirmationMessage();
+                    Scanner scannerExit = new Scanner(System.in);
+                    String exitConfirm = scannerExit.nextLine();
+                    if (!(exitConfirm.equals("y") || exitConfirm.equals("Y"))) {
+                        menuItem = 0;
+                    }
                     break;
-
                 default:
                     UserInterface.showUnexpectedValueMessage(menuItem);
             }
         } while (menuItem != UserInterface.MENU_ITEM_NUMBER);
     }
 
-    public static int getInput() {
+    private static int getInput() {
         Scanner scanner = new Scanner(System.in);
         do {
             try {
