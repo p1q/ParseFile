@@ -18,7 +18,7 @@ How to run the application with maven:
 2. Install Git (distributed version control system).
 3. Install Maven.
 4. For your convenience, you can add above-listed applications to PATH system variable, so you will be able to execute them from any folder.
-5. Install and configure MySQL database.
+5. Install and configure MySQL database. Change connection properties in the FactoryJdbc class.
    <br />Or you are free to use provided public server 178.136.201.61 with phpMyAdmin for testing purpose
    <br />(for your convenience all connection data are hardcoded). 
 6. Run bundled init_db.sql file in your database to initialize it. This step is already done for provided MySQL server.
