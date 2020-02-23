@@ -16,11 +16,22 @@
 1. Install JDK latest version and set correct JAVA_HOME variable
 2. Install Git (distributed version control system)
 3. Install an IDE
-4. Install and configure Apache Tomcat (I'm using version 8)
-5. Install and configure MySQL database
-6. Run init_db.sql file in your database
-7. Clone project from GitHub into your IDE as a maven project.
-8. That's all! You can run it.
+4. Install and configure MySQL database
+5. Run init_db.sql file in your database
+6. Clone project from GitHub into your IDE as a maven project.
+7. That's all! You can run it.
+
+## :warning: Please Note
+While coding some assumptions were made because of possible twofold understanding of some task details:
+- Opened file doesn't include very special symbols. The file will be cleaned of this symbols:  .,?!:;()@#$%&^<>'
+  but if it has something else, in that case the statistics can be inaccurate. 
+- Shortest and longest words can be "".
+- Two words with different letter case are considered as different words (e.g. "Sample" and "sample").
+- Line length for the whole file is considered as sum of all its lines.
+- FileParser class is covered by unit test (JUnit4).
+- Google Java Style is followed while coding.
+
+Of cause, it's possible to amend the application according to customer's requirements. 
 
 ## :man: Author
 

@@ -1,8 +1,8 @@
 package com.parsefile.model;
 
 public class WordDuplication {
-        private String duplicate;
-        private int quantity;
+    private String duplicate;
+    private int quantity;
 
     public String getDuplicate() {
         return duplicate;
@@ -14,10 +14,6 @@ public class WordDuplication {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public void incrementQuantity() {
